@@ -1894,6 +1894,7 @@ TUIWIDGETS_0.2.1 {
 
         "Tui::v0::ZTerminal::terminalDetectionResultText() const";
         "Tui::v0::ZTerminal::terminalSelfReportedNameAndVersion() const";
+        # "Tui::v0::ZTerminal::getInternalTerminal()";
 
 
         ########### ZTerminalDiagnosticsDialog

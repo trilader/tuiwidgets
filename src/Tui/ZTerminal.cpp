@@ -1116,6 +1116,11 @@ void ZTerminal::dispatchPasteEvent(ZPasteEvent &translated) {
     }
 }
 
+termpaint_terminal* ZTerminal::getInternalTerminal() const {
+    auto *const p = tuiwidgets_impl();
+    return p->terminal;
+}
+
 void ZTerminal::terminalSetupDone() {
     auto *const p = tuiwidgets_impl();
     termpaint_terminal_auto_detect_apply_input_quirks(p->terminal, p->backspaceIsX08);

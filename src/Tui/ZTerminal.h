@@ -10,6 +10,7 @@
 #include <Tui/ZCommon.h>
 #include <Tui/ZValuePtr.h>
 #include <Tui/tuiwidgets_internal.h>
+#include <termpaint.h>
 
 TUIWIDGETS_NS_START
 
@@ -176,6 +177,8 @@ public:
     void dispatchKeyboardEvent(ZKeyEvent &translated);
     void dispatchPasteEvent(ZPasteEvent &translated);
 
+    // trilader: For dirty hacks: Expose the underlaying termpaint_terminal object.
+    termpaint_terminal *getInternalTerminal() const;
     void terminalSetupDone();
 
 protected:
