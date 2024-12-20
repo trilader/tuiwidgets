@@ -138,7 +138,7 @@ void ZRadioButton::paintEvent(ZPaintEvent *event) {
     ZPainter *painter = event->painter();
 
     if (p->checked) {
-        painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("(•) "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+        painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("(x) "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     } else {
         painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("( ) "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     }
