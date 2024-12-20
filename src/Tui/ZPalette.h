@@ -79,7 +79,7 @@ public:
 protected:
     ZValuePtr<ZPalettePrivate> tuiwidgets_pimpl_ptr;
 
-private:
+public:
     static void setDefaultRules(ZPalette &p);
 
 private:
