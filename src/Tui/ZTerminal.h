@@ -39,6 +39,9 @@ public:
         DisableTaggedPaste = 1 << 7,
         DebugDisableBufferedIo = 1 << 8,
         ConservativeTrueColorOutput = 1 << 9,
+
+        // trilader: Add flag to allow disabling terminal autodetection
+        DisableTerminalAutoDetection = 1 << 10,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -172,6 +175,8 @@ public:
 
     void dispatchKeyboardEvent(ZKeyEvent &translated);
     void dispatchPasteEvent(ZPasteEvent &translated);
+
+    void terminalSetupDone();
 
 protected:
     virtual std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
