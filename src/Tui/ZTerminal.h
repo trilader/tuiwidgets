@@ -145,6 +145,7 @@ public:
 
     void updateOutput();
     void updateOutputForceFullRepaint();
+    void queryTerminalSizeAndApply();
 
     QString title() const;
     void setTitle(const QString &title);
@@ -189,6 +190,8 @@ Q_SIGNALS:
     void incompatibleTerminalDetected();
     void terminalConnectionLost();
     void focusChanged();
+    // trilader: To react to queryTerminalSizeAndApply
+    void sizeDetected(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;

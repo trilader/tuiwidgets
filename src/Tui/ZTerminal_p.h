@@ -110,6 +110,8 @@ public:
     termpaint_integration integration;
     std::unique_ptr<QSocketNotifier> inputNotifier;
 
+    bool terminalSizeQueryPending = false;
+
     bool updateRequested = false;
 
     QPointer<ZWidget> mainWidget;
