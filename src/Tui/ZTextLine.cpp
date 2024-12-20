@@ -57,7 +57,7 @@ QSize ZTextLine::sizeHint() const {
 
 void ZTextLine::paintEvent(ZPaintEvent *event) {
     auto *const p = tuiwidgets_impl();
-    ZTextStyle style = {getColor("control.fg"), getColor("control.bg")};
+    ZTextStyle style = {getColor("control.fg"), getColor("control.bg"), getAttributes("control.attrs")};
 
     auto *const painter = event->painter();
     painter->clear(style.foregroundColor(), style.backgroundColor());

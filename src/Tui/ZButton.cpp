@@ -111,41 +111,41 @@ void ZButton::paintEvent(ZPaintEvent *event) {
     auto *p = tuiwidgets_impl();
     ZTextStyle baseStyle;
     ZTextStyle shortcut;
-    ZTextStyle markerStyle = {getColor("control.fg"), getColor("control.bg")};
+    ZTextStyle markerStyle = {getColor("control.fg"), getColor("control.bg"), getAttributes("control.attrs")};
     QRect r = contentsRect();
     ZPainter painter = event->painter()->translateAndClip(r.left(), r.top(), r.width(), r.height());
 
     if (!isEnabled()) {
-        baseStyle = {getColor("button.disabled.fg"), getColor("button.disabled.bg")};
+        baseStyle = {getColor("button.disabled.fg"), getColor("button.disabled.bg"), getAttributes("control.disabled.attrs")};
         shortcut = baseStyle;
     } else {
         ZDefaultWidgetManager *defaultManager = findFacet<ZDefaultWidgetManager>();
 
         if (focus()) {
-            baseStyle = {getColor("button.focused.fg"), getColor("button.focused.bg")};
-            painter.writeWithColors(0, 0, QStringLiteral("»"), markerStyle.foregroundColor(), markerStyle.backgroundColor());
-            painter.writeWithColors(r.width() - 1, 0, QStringLiteral("«"), markerStyle.foregroundColor(), markerStyle.backgroundColor());
+            baseStyle = {getColor("button.focused.fg"), getColor("button.focused.bg"), getAttributes("button.focused.attrs")};
+            painter.writeWithAttributes(0, 0, QStringLiteral("»"), markerStyle.foregroundColor(), markerStyle.backgroundColor(), markerStyle.attributes());
+            painter.writeWithAttributes(r.width() - 1, 0, QStringLiteral("«"), markerStyle.foregroundColor(), markerStyle.backgroundColor(), markerStyle.attributes());
         } else if (defaultManager && isDefault() && defaultManager->isDefaultWidgetActive()) {
-            baseStyle = {getColor("button.default.fg"), getColor("button.default.bg")};
-            painter.writeWithColors(0, 0, QStringLiteral("→"), markerStyle.foregroundColor(), markerStyle.backgroundColor());
-            painter.writeWithColors(r.width() - 1, 0, QStringLiteral("←"), markerStyle.foregroundColor(), markerStyle.backgroundColor());
+            baseStyle = {getColor("button.default.fg"), getColor("button.default.bg"), getAttributes("button.default.attrs")};
+            painter.writeWithAttributes(0, 0, QStringLiteral("→"), markerStyle.foregroundColor(), markerStyle.backgroundColor(), markerStyle.attributes());
+            painter.writeWithAttributes(r.width() - 1, 0, QStringLiteral("←"), markerStyle.foregroundColor(), markerStyle.backgroundColor(), markerStyle.attributes());
         } else {
-            baseStyle = {getColor("button.fg"), getColor("button.bg")};
+            baseStyle = {getColor("button.fg"), getColor("button.bg"), getAttributes("button.attrs")};
         }
-        shortcut = {getColor("button.shortcut.fg"), getColor("button.shortcut.bg")};
+        shortcut = {getColor("button.shortcut.fg"), getColor("button.shortcut.bg"), getAttributes("button.shortcut.attrs")};
     }
 
     if (r.width() > 4) {
         p->styledText.setMnemonicStyle(baseStyle, shortcut);
-        painter.writeWithColors(1, 0, QStringLiteral("[ "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-        painter.writeWithColors(r.width() - 3, 0, QStringLiteral(" ]"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter.writeWithAttributes(1, 0, QStringLiteral("[ "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+        painter.writeWithAttributes(r.width() - 3, 0, QStringLiteral(" ]"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
         if (p->styledText.width(painter.textMetrics()) > r.width() - 5) {
             p->styledText.write(&painter, 2, 0, r.width() - 4);
         } else {
             p->styledText.write(&painter, 3, 0, r.width() - 5);
         }
     } else {
-        painter.writeWithColors(r.width() >= 3 ? 1 : 0, 0, QStringLiteral("[]"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter.writeWithAttributes(r.width() >= 3 ? 1 : 0, 0, QStringLiteral("[]"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     }
 }
 

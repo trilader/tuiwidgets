@@ -10,6 +10,7 @@
 #include <QStringList>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZCommon.h>
 #include <Tui/ZSymbol.h>
 #include <Tui/ZValuePtr.h>
 
@@ -31,6 +32,11 @@ public:
     struct ColorDef {
         ZImplicitSymbol name;
         ZColor color;
+    };
+
+    struct AttributeDef {
+        ZImplicitSymbol name;
+        ZTextAttributes attributes;
     };
 
     struct AliasDef {
@@ -59,10 +65,12 @@ public:
 
 public:
     static ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x);
+    static ZTextAttributes getAttributes(ZWidget *targetWidget, ZImplicitSymbol x);
 
     void setColors(QList<ColorDef> newColors);
     //void addLocalAlias(QList<AliasDef> newAliases);
     void addRules(QList<RuleDef> newRules);
+    void setAttributes(QList<AttributeDef>);
 
     ZPalette& operator=(const ZPalette& other);
 

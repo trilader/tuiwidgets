@@ -84,24 +84,24 @@ void ZCheckBox::paintEvent(ZPaintEvent *event) {
         if (focus()) {
             focusIndicator = QStringLiteral("»");
             showCursor({cm.left() + 2, cm.top() + 0});
-            baseStyle = {getColor("control.focused.fg"), getColor("control.focused.bg")};
+            baseStyle = {getColor("control.focused.fg"), getColor("control.focused.bg"), getAttributes("control.focused.attrs")};
         } else {
-            baseStyle = {getColor("control.fg"), getColor("control.bg")};
+            baseStyle = {getColor("control.fg"), getColor("control.bg"), getAttributes("control.attrs")};
         }
-        shortcut = {getColor("control.shortcut.fg"), getColor("control.shortcut.bg")};
+        shortcut = {getColor("control.shortcut.fg"), getColor("control.shortcut.bg"), getAttributes("control.shortcut.attrs")};
     } else {
-        baseStyle = {getColor("control.disabled.fg"), getColor("control.disabled.bg")};
+        baseStyle = {getColor("control.disabled.fg"), getColor("control.disabled.bg"), getAttributes("control.disabled.attrs")};
         shortcut = baseStyle;
     }
 
     ZPainter *painter = event->painter();
 
     if (p->state == Checked) {
-        painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[X] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("[X] "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     } else if (p->state == Unchecked) {
-        painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[ ] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("[ ] "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     } else {
-        painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[#] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter->writeWithAttributes(cm.left(), cm.top(), focusIndicator + QStringLiteral("[#] "), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     }
     p->styledText.setMnemonicStyle(baseStyle, shortcut);
     p->styledText.write(painter, cm.left() + 5, cm.top(), geometry().width() - cm.left() - cm.right() - 4);

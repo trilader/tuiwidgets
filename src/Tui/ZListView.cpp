@@ -229,12 +229,12 @@ void ZListView::paintEvent(ZPaintEvent *event) {
     auto *term = terminal();
 
     if (isEnabled()) {
-        baseStyle = {getColor("dataview.fg"), getColor("dataview.bg")};
-        selectedStyle = {getColor("dataview.selected.fg"), getColor("dataview.selected.bg")};
-        selectedStyleFocus = {getColor("dataview.selected.focused.fg"), getColor("dataview.selected.focused.bg")};
+        baseStyle = {getColor("dataview.fg"), getColor("dataview.bg"), getAttributes("dataview.attrs")};
+        selectedStyle = {getColor("dataview.selected.fg"), getColor("dataview.selected.bg"), getAttributes("dataview.selected.attrs")};
+        selectedStyleFocus = {getColor("dataview.selected.focused.fg"), getColor("dataview.selected.focused.bg"), getAttributes("dataview.selected.focused.attrs")};
     } else {
-        baseStyle = {getColor("dataview.disabled.fg"), getColor("dataview.disabled.bg")};
-        selectedStyle = {getColor("dataview.disabled.selected.fg"), getColor("dataview.disabled.selected.bg")};
+        baseStyle = {getColor("dataview.disabled.fg"), getColor("dataview.disabled.bg"), getAttributes("dataview.disabled.attrs")};
+        selectedStyle = {getColor("dataview.disabled.selected.fg"), getColor("dataview.disabled.selected.bg"), getAttributes("dataview.disabled.selected.attrs")};
         selectedStyleFocus = selectedStyle;
     }
     painter->clear(baseStyle.foregroundColor(), baseStyle.backgroundColor());
@@ -271,9 +271,14 @@ void ZListView::paintEvent(ZPaintEvent *event) {
             itemLeftDecorationBg = idx.data(LeftDecorationBgRole).value<ZColor>();
         }
 
+        ZTextAttributes itemLeftDecorationAttrs = effectiveStyle.attributes();
+        if (idx.data(LeftDecorationAttributesRole).canConvert<ZTextAttributes>()) {
+            itemLeftDecorationAttrs = idx.data(itemLeftDecorationAttrs).value<ZTextAttributes>();
+        }
+
         int leftDecorationWidth = term->textMetrics().sizeInColumns(itemLeftDecoration);
         if (leftDecorationWidth) {
-            clippedPainter.writeWithColors(0, i, itemLeftDecoration, itemLeftDecorationFg, itemLeftDecorationBg);
+            clippedPainter.writeWithAttributes(0, i, itemLeftDecoration, itemLeftDecorationFg, itemLeftDecorationBg, itemLeftDecorationAttrs);
         }
 
         int itemLeftDecorationSpace = idx.data(LeftDecorationSpaceRole).toInt();
@@ -284,19 +289,23 @@ void ZListView::paintEvent(ZPaintEvent *event) {
 
         if (p->selectionModel && p->selectionModel->currentIndex() == idx) {
             if (term && isAncestorOf(term->focusWidget()) && isEnabled()) {
-                painter->writeWithColors(geometry().width()-1, i, QStringLiteral("«"),
-                                         effectiveStyle.foregroundColor(),
-                                         effectiveStyle.backgroundColor());
-                painter->writeWithColors(0, i, QStringLiteral("»"),
-                                         effectiveStyle.foregroundColor(),
-                                         effectiveStyle.backgroundColor());
+                painter->writeWithAttributes(geometry().width()-1, i, QStringLiteral("«"),
+                                             effectiveStyle.foregroundColor(),
+                                             effectiveStyle.backgroundColor(),
+                                             effectiveStyle.attributes());
+                painter->writeWithAttributes(0, i, QStringLiteral("»"),
+                                             effectiveStyle.foregroundColor(),
+                                             effectiveStyle.backgroundColor(),
+                                             effectiveStyle.attributes());
             } else {
-                painter->writeWithColors(geometry().width()-1, i, QStringLiteral("←"),
-                                         effectiveStyle.foregroundColor(),
-                                         effectiveStyle.backgroundColor());
-                painter->writeWithColors(0, i, QStringLiteral("→"),
-                                         effectiveStyle.foregroundColor(),
-                                         effectiveStyle.backgroundColor());
+                painter->writeWithAttributes(geometry().width()-1, i, QStringLiteral("←"),
+                                             effectiveStyle.foregroundColor(),
+                                             effectiveStyle.backgroundColor(),
+                                             effectiveStyle.attributes());
+                painter->writeWithAttributes(0, i, QStringLiteral("→"),
+                                             effectiveStyle.foregroundColor(),
+                                             effectiveStyle.backgroundColor(),
+                                             effectiveStyle.attributes());
             }
         }
     }
