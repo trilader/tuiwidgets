@@ -421,7 +421,8 @@ void ZWidget::setMinimumSize(QSize s) {
 
     ZTerminal *term = terminal();
     if (term) {
-        term->requestLayout(this);
+        ZWidget *parent = parentWidget();
+        term->requestLayout(parent ? parent : this);
     }
 }
 
@@ -440,7 +441,8 @@ void ZWidget::setMaximumSize(QSize s) {
 
     ZTerminal *term = terminal();
     if (term) {
-        term->requestLayout(this);
+        ZWidget *parent = parentWidget();
+        term->requestLayout(parent ? parent : this);
     }
 }
 
@@ -454,7 +456,8 @@ void ZWidget::setFixedSize(QSize s) {
 
     ZTerminal *term = terminal();
     if (term) {
-        term->requestLayout(this);
+        ZWidget *parent = parentWidget();
+        term->requestLayout(parent ? parent : this);
     }
 }
 
@@ -473,7 +476,8 @@ void ZWidget::setSizePolicyH(SizePolicy policy) {
 
     ZTerminal *term = terminal();
     if (term) {
-        term->requestLayout(this);
+        ZWidget *parent = parentWidget();
+        term->requestLayout(parent ? parent : this);
     }
 }
 
@@ -488,7 +492,8 @@ void ZWidget::setSizePolicyV(SizePolicy policy) {
 
     ZTerminal *term = terminal();
     if (term) {
-        term->requestLayout(this);
+        ZWidget *parent = parentWidget();
+        term->requestLayout(parent ? parent : this);
     }
 }
 
