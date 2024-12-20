@@ -773,6 +773,23 @@ void ZTerminal::resize(int width, int height) {
     forceRepaint();
 }
 
+void ZTerminal::queryTerminalSizeAndApply() {
+    auto *const p = tuiwidgets_impl();
+
+    //QByteArray utf8 = QStringLiteral("\x1b[9999;9999H\x1b[?6n").toUtf8();
+    //QByteArray utf8 = QStringLiteral("\x1b[?6h\x1b[9999;9999H\x1b[?6n\x1b[?6l").toUtf8();
+    QByteArray utf8 = QStringLiteral("\x1b[r\x1b[999;999H\x1b[6n").toUtf8();
+    if (p->externalConnection) {
+        p->externalConnection->delegate->write(utf8.data(), utf8.size());
+        p->externalConnection->delegate->flush();
+    } else {
+        p->internalConnection_integration_write(utf8.data(), utf8.size());
+        p->internalConnection_integration_flush();
+    }
+
+    p->terminalSizeQueryPending = true;
+}
+
 void ZTerminalPrivate::updateNativeTerminalState() {
     if (titleNeedsUpdate) {
         termpaint_terminal_set_title(terminal, title.toUtf8().data(), TERMPAINT_TITLE_MODE_ENSURE_RESTORE);
@@ -1159,6 +1176,14 @@ bool ZTerminal::event(QEvent *event) {
             }
         } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
             update();
+        } else if (p->terminalSizeQueryPending && native->type == TERMPAINT_EV_CURSOR_POSITION) {
+            int oldW = width();
+            int oldH = height();
+            int newW = native->cursor_position.x + 1;
+            int newH = native->cursor_position.y + 1;
+            resize(newW, newH);
+            p->terminalSizeQueryPending = false;
+            Q_EMIT sizeDetected(oldW, oldH, newW, newH);
         } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
             termpaint_terminal_auto_detect_apply_input_quirks(p->terminal, p->backspaceIsX08);
             if (termpaint_terminal_might_be_supported(p->terminal)
