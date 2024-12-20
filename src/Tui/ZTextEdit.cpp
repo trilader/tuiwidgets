@@ -614,7 +614,7 @@ void ZTextEdit::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
     painter->clear(fg, bg, attrs);
 
-    setCursorColor(fg.redOrGuess(), fg.greenOrGuess(), fg.blueOrGuess());
+    //setCursorColor(fg.redOrGuess(), fg.greenOrGuess(), fg.blueOrGuess());
 
     ZTextOption option = textOption();
 
