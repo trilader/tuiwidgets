@@ -266,21 +266,26 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     auto *const p = tuiwidgets_impl();
     ZColor frameBg, frameFg;
     ZColor buttonBg, buttonFg;
+    ZTextAttributes frameAttrs, buttonAttrs;
     bool active = isInFocusPath();
 
     if (active) {
         if (!p->interactiveMode) {
             frameBg = getColor("window.frame.focused.bg");
             frameFg = getColor("window.frame.focused.fg");
+            frameAttrs = getAttributes("window.frame.focused.attrs");
         } else {
             frameBg = getColor("window.frame.focused.control.bg");
             frameFg = getColor("window.frame.focused.control.fg");
+            frameAttrs = getAttributes("window.frame.focused.control.attrs");
         }
         buttonBg = getColor("window.frame.focused.control.bg");
         buttonFg = getColor("window.frame.focused.control.fg");
+        buttonAttrs = getAttributes("window.frame.focused.control.attrs");
     } else {
         frameBg = getColor("window.frame.unfocused.bg");
         frameFg = getColor("window.frame.unfocused.fg");
+        buttonAttrs = getAttributes("window.frame.unfocused.attrs");
     }
 
     auto *painter = event->painter();
@@ -292,40 +297,40 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     auto decorations = windowDecorations[active + 2 * !extendetCharsetAvailable];
 
     if (p->borders & TopEdge && p->borders & LeftEdge) {
-        painter->writeWithColors(0, 0, QString::fromUtf8(decorations.topLeft), frameFg, frameBg);
+        painter->writeWithAttributes(0, 0, QString::fromUtf8(decorations.topLeft), frameFg, frameBg, frameAttrs);
     } else if (p->borders & TopEdge) {
-        painter->writeWithColors(0, 0, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg);
+        painter->writeWithAttributes(0, 0, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg, frameAttrs);
     } else if (p->borders & LeftEdge) {
-        painter->writeWithColors(0, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg);
+        painter->writeWithAttributes(0, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg, frameAttrs);
     }
     if (p->borders & TopEdge && p->borders & RightEdge) {
-        painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.topRight), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, 0, QString::fromUtf8(decorations.topRight), frameFg, frameBg, frameAttrs);
     } else if (p->borders & TopEdge) {
-        painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, 0, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg, frameAttrs);
     } else if (p->borders & RightEdge) {
-        painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg, frameAttrs);
     }
     if (p->borders & BottomEdge && p->borders & RightEdge) {
-        painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.bottomRight), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, h - 1, QString::fromUtf8(decorations.bottomRight), frameFg, frameBg, frameAttrs);
     } else if (p->borders & BottomEdge) {
-        painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, h - 1, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg, frameAttrs);
     } else if (p->borders & RightEdge) {
-        painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg);
+        painter->writeWithAttributes(w - 1, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg, frameAttrs);
     }
     if (p->borders & BottomEdge && p->borders & LeftEdge) {
-        painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.bottomLeft), frameFg, frameBg);
+        painter->writeWithAttributes(0, h - 1, QString::fromUtf8(decorations.bottomLeft), frameFg, frameBg, frameAttrs);
     } else if (p->borders & BottomEdge) {
-        painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg);
+        painter->writeWithAttributes(0, h - 1, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg, frameAttrs);
     } else if (p->borders & LeftEdge) {
-        painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg);
+        painter->writeWithAttributes(0, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg, frameAttrs);
     }
 
     QString hline = QString(w - 2, decorations.horizontal);
     if (p->borders & TopEdge) {
-        painter->writeWithColors(1, 0, hline, frameFg, frameBg);
+        painter->writeWithAttributes(1, 0, hline, frameFg, frameBg, frameAttrs);
     }
     if (p->borders & BottomEdge) {
-        painter->writeWithColors(1, h - 1, hline, frameFg, frameBg);
+        painter->writeWithAttributes(1, h - 1, hline, frameFg, frameBg, frameAttrs);
     }
 
     if (p->borders & TopEdge && p->windowTitle.size()) {
@@ -336,26 +341,26 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
         }
         int x = std::max(minX, w / 2 - titleLength / 2);
         if (minX < x && x != 1) {
-            painter->writeWithColors(x - 1, 0, QStringLiteral(" "), frameFg, frameBg);
+            painter->writeWithAttributes(x - 1, 0, QStringLiteral(" "), frameFg, frameBg, frameAttrs);
         }
-        painter->writeWithColors(x, 0, p->windowTitle, frameFg, frameBg);
+        painter->writeWithAttributes(x, 0, p->windowTitle, frameFg, frameBg, frameAttrs);
         if (x + titleLength < w - 1) {
-            painter->writeWithColors(x + titleLength, 0, QStringLiteral(" "), frameFg, frameBg);
+            painter->writeWithAttributes(x + titleLength, 0, QStringLiteral(" "), frameFg, frameBg, frameAttrs);
         }
     }
 
     for (int i = 1; i < h - 1; i++) {
         if (p->borders & LeftEdge) {
-            painter->writeWithColors(0, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg);
+            painter->writeWithAttributes(0, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg, frameAttrs);
         }
         if (p->borders & RightEdge) {
-            painter->writeWithColors(w - 1, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg);
+            painter->writeWithAttributes(w - 1, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg, frameAttrs);
         }
     }
     if (p->borders & TopEdge && (p->options & CloseButton) && active) {
-        painter->writeWithColors(2, 0, QStringLiteral("["), frameFg, frameBg);
-        painter->writeWithColors(3, 0, QStringLiteral("■"), buttonFg, buttonBg);
-        painter->writeWithColors(4, 0, QStringLiteral("]"), frameFg, frameBg);
+        painter->writeWithAttributes(2, 0, QStringLiteral("["), frameFg, frameBg, frameAttrs);
+        painter->writeWithAttributes(3, 0, QStringLiteral("■"), buttonFg, buttonBg, buttonAttrs);
+        painter->writeWithAttributes(4, 0, QStringLiteral("]"), frameFg, frameBg, frameAttrs);
     }
 }
 

@@ -109,14 +109,15 @@ void ZLabel::paintEvent(ZPaintEvent *event) {
     }
     if (isEnabled() && buddyEnabled) {
         if (term && term->focusWidget() == p->buddy && p->buddy) {
-            baseStyle = {getColor("control.focused.fg"), getColor("control.focused.bg")};
-            painter->writeWithColors(r.left(), r.top(), QStringLiteral("»"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+            baseStyle = {getColor("control.focused.fg"), getColor("control.focused.bg"), getAttributes("control.focused.attrs")};
+            painter->writeWithAttributes(r.left(), r.top(), QStringLiteral("»"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
         } else {
-            baseStyle = {getColor("control.fg"), getColor("control.bg")};
+            baseStyle = {getColor("control.fg"), getColor("control.bg"), getAttributes("control.attrs")};
         }
-        shortcut = {getColor("control.shortcut.fg"), getColor("control.shortcut.bg")};
+        shortcut = {getColor("control.shortcut.fg"), getColor("control.shortcut.bg"), getAttributes("control.shortcut.attrs")};
+        //shortcut.setAttributes(ZTextAttribute::Inverse);
     } else {
-        baseStyle = {getColor("control.disabled.fg"), getColor("control.disabled.bg")};
+        baseStyle = {getColor("control.disabled.fg"), getColor("control.disabled.bg"), getAttributes("control.disabled.attrs")};
         shortcut = baseStyle;
     }
 

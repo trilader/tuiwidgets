@@ -87,7 +87,7 @@ void ZRoot::focusWindowHelper(bool forward) {
 
 void ZRoot::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
-    painter->clearWithChar(getColor("root.fg"), getColor("root.bg"), fillChar());
+    painter->clearWithChar(getColor("root.fg"), getColor("root.bg"), fillChar(), getAttributes("root.attrs"));
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {

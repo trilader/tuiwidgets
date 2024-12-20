@@ -575,37 +575,44 @@ void ZTextEdit::paintEvent(ZPaintEvent *event) {
 
     ZColor fg;
     ZColor bg;
+    ZTextAttributes attrs;
 
     if (focus()) {
         bg = getColor("textedit.focused.bg");
         fg = getColor("textedit.focused.fg");
+        attrs = getAttributes("textedit.focused.attrs");
     } else if (!isEnabled()) {
         bg = getColor("textedit.disabled.bg");
         fg = getColor("textedit.disabled.fg");
+        attrs = getAttributes("textedit.disabled.attrs");
     } else {
         bg = getColor("textedit.bg");
         fg = getColor("textedit.fg");
+        attrs = getAttributes("textedit.attrs");
     }
     const ZTextStyle base{fg, bg};
 
     ZColor lineNumberFg;
     ZColor lineNumberBg;
+    ZTextAttributes lineNumberAttrs;
 
     if (focus()) {
         lineNumberFg = getColor("textedit.focused.linenumber.fg");
         lineNumberBg = getColor("textedit.focused.linenumber.bg");
+        lineNumberAttrs = getAttributes("textedit.focused.linenumber.attrs");
     } else {
         lineNumberFg = getColor("textedit.linenumber.fg");
         lineNumberBg = getColor("textedit.linenumber.bg");
+        lineNumberAttrs = getAttributes("textedit.focused.linenumber.attrs");
     }
 
     const ZTextStyle selected{getColor("textedit.selected.fg"),
                                    getColor("textedit.selected.bg"),
-                                   ZTextAttribute::Bold};
+                                   getAttributes("textedit.selected.attrs") | ZTextAttribute::Bold};
 
 
     auto *painter = event->painter();
-    painter->clear(fg, bg);
+    painter->clear(fg, bg, attrs);
 
     setCursorColor(fg.redOrGuess(), fg.greenOrGuess(), fg.blueOrGuess());
 
@@ -663,9 +670,9 @@ void ZTextEdit::paintEvent(ZPaintEvent *event) {
 
         if (p->showLineNumbers) {
             for (int i = lay.lineCount() - 1; i > 0; i--) {
-                painter->writeWithColors(0, y + i,
-                                         QStringLiteral(" ").repeated(lineNumberBorderWidth()),
-                                         lineNumberFg, lineNumberBg);
+                painter->writeWithAttributes(0, y + i,
+                                             QStringLiteral(" ").repeated(lineNumberBorderWidth()),
+                                             lineNumberFg, lineNumberBg, lineNumberAttrs);
             }
             QString numberText = QString::number(line + 1)
                     + QStringLiteral(" ").repeated(allBordersWidth() - QString::number(line + 1).size());
@@ -675,9 +682,9 @@ void ZTextEdit::paintEvent(ZPaintEvent *event) {
                 lineNumberY = 0;
             }
             if (line == cursorLine) {
-                painter->writeWithAttributes(0, lineNumberY, numberText, lineNumberFg, lineNumberBg, ZTextAttribute::Bold);
+                painter->writeWithAttributes(0, lineNumberY, numberText, lineNumberFg, lineNumberBg, lineNumberAttrs | ZTextAttribute::Bold);
             } else {
-                painter->writeWithColors(0, lineNumberY, numberText, lineNumberFg, lineNumberBg);
+                painter->writeWithAttributes(0, lineNumberY, numberText, lineNumberFg, lineNumberBg, lineNumberAttrs);
             }
         }
         y += lay.lineCount();

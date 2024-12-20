@@ -18,8 +18,11 @@ public:
     virtual ~ZPalettePrivate();
 
     QHash<ZSymbol, ZColor> colorDefinitions;
+    QHash<ZSymbol, ZTextAttributes> attributeDefinitions;
     QHash<ZSymbol, ZSymbol> localAlias;
     QList<ZPalette::RuleDef> rules;
+
+    template<typename DefType, typename Getter> QHash<ZSymbol, DefType> getDefs(ZWidget *targetWidget, Getter getter) const;
 
     ZPalette *pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZPalette)

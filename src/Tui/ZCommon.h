@@ -5,6 +5,7 @@
 
 #include <Tui/tuiwidgets_internal.h>
 
+#include <QMetaType>
 #include <Qt>
 
 TUIWIDGETS_NS_START
@@ -15,6 +16,7 @@ enum ZItemDataRole : int {
     LeftDecorationFgRole = (TUI_ITEM_ROLE_BASE + 1),
     LeftDecorationBgRole = (TUI_ITEM_ROLE_BASE + 2),
     LeftDecorationSpaceRole = (TUI_ITEM_ROLE_BASE + 3),
+    LeftDecorationAttributesRole = (TUI_ITEM_ROLE_BASE + 3),
 };
 
 // import some vales/types from Qt
@@ -149,6 +151,7 @@ TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(ZTextAttributes)
 
 TUIWIDGETS_NS_END
 
+Q_DECLARE_METATYPE(TUIWIDGETS_NS_FULL::ZTextAttributes);
 TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(ZTextAttributes)
 
 #endif // TUIWIDGETS_ZCOMMON_INCLUDED

@@ -95,34 +95,34 @@ QObject *ZMenu::facet(const QMetaObject &metaObject) const {
 void ZMenu::paintEvent(ZPaintEvent *event) {
     auto *const p = tuiwidgets_impl();
     auto *painter = event->painter();
-    ZTextStyle baseStyle = {getColor("menu.fg"), getColor("menu.bg")};
-    ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), ZTextAttribute::Underline};
+    ZTextStyle baseStyle = {getColor("menu.fg"), getColor("menu.bg"), getAttributes("menu.attrs")};
+    ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), getAttributes("menu.shortcut.attrs") | ZTextAttribute::Underline};
     // For better support of terminals that don't do color or that don't understand the color format used, apply
     // inverse attribute but also swap background and foreground color. This ensures that these terminals show the
     // selected entry in inverse. By also swapping the colors terminals with full color support will still show the
     // intended colors.
-    ZTextStyle selectedStyle = {getColor("menu.selected.bg"), getColor("menu.selected.fg"), ZTextAttribute::Inverse};
+    ZTextStyle selectedStyle = {getColor("menu.selected.bg"), getColor("menu.selected.fg"), getAttributes("menu.selected.attrs") | ZTextAttribute::Inverse};
     ZTextStyle selectedShortcut = {getColor("menu.selected.shortcut.bg"), getColor("menu.selected.shortcut.fg"),
-                                  ZTextAttribute::Inverse | ZTextAttribute::Underline};
-    ZTextStyle disabledStyle = {getColor("menu.disabled.fg"), getColor("menu.disabled.bg")};
-    ZTextStyle selectedDisabledStyle = {getColor("menu.selected.disabled.fg"), getColor("menu.selected.disabled.bg")};
+                                  getAttributes("menu.selected.shortcut.attrs") | ZTextAttribute::Inverse | ZTextAttribute::Underline};
+    ZTextStyle disabledStyle = {getColor("menu.disabled.fg"), getColor("menu.disabled.bg"), getAttributes("menu.disabled.attrs")};
+    ZTextStyle selectedDisabledStyle = {getColor("menu.selected.disabled.fg"), getColor("menu.selected.disabled.bg"), getAttributes("menu.selected.disabled.attrs")};
     painter->clear(baseStyle.foregroundColor(), baseStyle.backgroundColor());
     ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
 
     int w = geometry().width();
     int h = geometry().height();
-    painter->writeWithColors(1, 0, QStringLiteral("┌"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-    painter->writeWithColors(w - 2, 0, QStringLiteral("┐"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-    painter->writeWithColors(w - 2, h - 1, QStringLiteral("┘"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-    painter->writeWithColors(1, h - 1, QStringLiteral("└"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+    painter->writeWithAttributes(1, 0, QStringLiteral("┌"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+    painter->writeWithAttributes(w - 2, 0, QStringLiteral("┐"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+    painter->writeWithAttributes(w - 2, h - 1, QStringLiteral("┘"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+    painter->writeWithAttributes(1, h - 1, QStringLiteral("└"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
 
     QString hline = QStringLiteral("─").repeated(w - 4);
-    painter->writeWithColors(2, 0, hline, baseStyle.foregroundColor(), baseStyle.backgroundColor());
-    painter->writeWithColors(2, h - 1, hline, baseStyle.foregroundColor(), baseStyle.backgroundColor());
+    painter->writeWithAttributes(2, 0, hline, baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+    painter->writeWithAttributes(2, h - 1, hline, baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
 
     for (int i = 1; i < h - 1; i++) {
-        painter->writeWithColors(1, i, QStringLiteral("│"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-        painter->writeWithColors(w - 2, i, QStringLiteral("│"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+        painter->writeWithAttributes(1, i, QStringLiteral("│"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
+        painter->writeWithAttributes(w - 2, i, QStringLiteral("│"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
     }
 
     int y = 1;
@@ -149,7 +149,7 @@ void ZMenu::paintEvent(ZPaintEvent *event) {
             st.setMarkup(QStringLiteral("<body>") + item.fakeShortcut() + QStringLiteral("</body>"));
             st.write(painter, w - 2 - p->shortcutWidth - 1, y, p->shortcutWidth);
         } else {
-            painter->writeWithColors(1, y, QStringLiteral("├") + hline + QStringLiteral("┤"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
+            painter->writeWithAttributes(1, y, QStringLiteral("├") + hline + QStringLiteral("┤"), baseStyle.foregroundColor(), baseStyle.backgroundColor(), baseStyle.attributes());
         }
         ++y;
     }

@@ -131,6 +131,8 @@ public:
     void setPalette(const ZPalette &pal);
     TUIWIDGETS_NODISCARD_NOSIDEEFFECT
     ZColor getColor(const ZImplicitSymbol &x);
+    TUIWIDGETS_NODISCARD_NOSIDEEFFECT
+    ZTextAttributes getAttributes(const ZImplicitSymbol &x);
 
     TUIWIDGETS_NODISCARD_GETTER
     QStringList paletteClass() const;

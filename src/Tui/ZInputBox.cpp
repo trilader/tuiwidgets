@@ -157,23 +157,27 @@ void ZInputBox::paintEvent(ZPaintEvent *event) {
 
     ZColor bg;
     ZColor fg;
+    ZTextAttributes attrs;
     if (focus()) {
         bg = getColor("lineedit.focused.bg");
         fg = getColor("lineedit.focused.fg");
+        attrs = getAttributes("linedit.focused.attrs");
     } else if (!isEnabled()) {
         bg = getColor("lineedit.disabled.bg");
         fg = getColor("lineedit.disabled.fg");
+        attrs = getAttributes("linedit.disabled.attrs");
     } else {
         bg = getColor("lineedit.bg");
         fg = getColor("lineedit.fg");
+        attrs = getAttributes("linedit.attrs");
     }
 
     painter.clear(fg, bg);
     if (focus()) {
-        textlayout.draw(painter, {-p->scrollPosition, 0}, {fg, bg});
+        textlayout.draw(painter, {-p->scrollPosition, 0}, {fg, bg, attrs});
         textlayout.showCursor(painter, {-p->scrollPosition, 0}, p->cursorPosition);
     } else {
-        textlayout.draw(painter, {0, 0}, {fg, bg});
+        textlayout.draw(painter, {0, 0}, {fg, bg, attrs});
     }
     if (p->echoMode == NoEcho) {
         painter.setCursor(0, 0);
