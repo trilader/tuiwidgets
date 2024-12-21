@@ -10,7 +10,9 @@
 #include <Tui/ZCommon.h>
 #include <Tui/ZValuePtr.h>
 #include <Tui/tuiwidgets_internal.h>
-#include <termpaint.h>
+
+struct termpaint_terminal_;
+typedef struct termpaint_terminal_ termpaint_terminal;
 
 TUIWIDGETS_NS_START
 
